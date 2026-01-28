@@ -2,7 +2,7 @@
     <div
         class="header flex justify-between items-center flex-row border-2 border-[#54834E] shadow-xl rounded-l-3xl rounded-br-3xl w-full bg-linear-to-r from-[#2E973E]/80 to-[#54834E]/40 p-3">
         <h1 class="text-xl font-semibold"><span class="text-2xl text-[#EFEA62] font-bold">Hi,</span> My Name</h1>
-        <h1 class="text-2xl font-semibold">Admin</h1>
+        <h1 class="text-2xl font-semibold">Toko Mima</h1>
     </div>
     <div
         class="flex justify-around items-center border-2 border-[#54834E] shadow-xl flex-row bg-linear-to-r from-[#54834E]/40 to-white

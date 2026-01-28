@@ -11,9 +11,9 @@
 <body>
     <div class="w-full min-h-screen">
         <div class="flex justify-between gap-3">
-            @include('admin.template.sidebar')
+            @include('penjual.template.sidebar')
             <div class="w-full flex-col">
-                @include('admin.template.header')
+                @include('penjual.template.header')
                 <div class="p-4">
                     <?= $content ?>
                 </div>

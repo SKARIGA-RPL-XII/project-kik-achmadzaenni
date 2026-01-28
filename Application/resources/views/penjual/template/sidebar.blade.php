@@ -9,19 +9,15 @@
         <div class="text-xl font-semibold text-white space-y-2">
             <div class="flex flex-row items-center bg-[#2E973E]/40 hover:bg-[#2E973E]/20 transition-all scale-100 hover:scale-102 rounded-xl shadow-lg p-2 gap-2">
                 <i class="fa-solid fa-qrcode"></i>
-                <a href="{{ route('admin_dashboard') }}">Dashboard</a>
+                <h1 class="">Dashboard</h1>
             </div>
             <div class="flex flex-row items-center bg-[#2E973E]/40 hover:bg-[#2E973E]/20 transition-all scale-100 hover:scale-102 rounded-xl shadow-lg p-2 gap-2">
-                <i class="fa-solid fa-server"></i>
-                <a href="{{ route('admin_master_menu') }}">Master menu</a>
-            </div>
-            <div class="flex flex-row items-center bg-[#2E973E]/40 hover:bg-[#2E973E]/20 transition-all scale-100 hover:scale-102 rounded-xl shadow-lg p-2 gap-2">
-                <i class="fa-solid fa-server"></i>
-                <a href="{{ route('admin_master_user') }}">Master user</a>
+                <i class="fa-solid fa-warehouse"></i>
+                <h1 class="">Inventory</h1>
             </div>
             <div class="flex flex-row items-center bg-[#2E973E]/40 hover:bg-[#2E973E]/20 transition-all scale-100 hover:scale-102 rounded-xl shadow-lg p-2 gap-2">
                 <i class="fa-solid fa-receipt"></i>
-                <a href="{{ route('admin_profile') }}">Transaksi</a>
+                <h1 class="">Transaksi</h1>
             </div>
         </div>
     </div>
