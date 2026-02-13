@@ -10,9 +10,39 @@
     <title>Not Found</title>
 </head>
 
-<body class="w-screen h-screen overflow-hidden">
-    <dotlottie-wc src="https://lottie.host/5960cfdb-3e37-43aa-9368-a82f253104ec/6tOlNsLTbT.lottie" class="w-full h-full"
-        autoplay loop></dotlottie-wc>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="max-w-md w-full text-center">
+            <div class="bg-white shadow-xl rounded-2xl p-8">
+                <div class="flex justify-center">
+                    <dotlottie-wc src="https://lottie.host/d7b63183-bd8b-4485-a611-9bf3905a74a7/cawo4GPJkY.lottie"
+                        style="width: 220px;height: 220px" autoplay loop></dotlottie-wc>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 mt-4">
+                    Halaman Tidak Ditemukan
+                </h1>
+                <p class="text-gray-600 mt-2 text-sm">
+                    Maaf, halaman
+                    <span class="font-semibold text-red-600">
+                        {{ request()->path() }}
+                    </span>.
+                    yang anda cari tidak dapat ditemukan. Silakan kembali ke halaman utama.
+                </p>
+            </div>
+            <div class="mt-6 w-full flex justify-center items-center gap-3">
+                <a href="/"
+                    class="w-full text-white bg-success hover:bg-success-strong focus:ring-4 focus:ring-success-medium
+                       shadow-lg font-medium rounded-base text-sm px-5 py-2.5 transition-all scale-100 hover:scale-102">
+                    Dashboard
+                </a>
+                <a href="javascript:history.back()"
+                    class="w-full text-white bg-success hover:bg-success-strong focus:ring-4 focus:ring-success-medium
+                       shadow-lg font-medium rounded-base text-sm px-5 py-2.5 transition-all scale-100 hover:scale-102">
+                    Kembali
+                </a>
+            </div>
+        </div>
+    </div>
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.11/dist/dotlottie-wc.js" type="module"></script>
 </body>
 

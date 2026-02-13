@@ -20,6 +20,7 @@ class TrOtp extends Model
         'userid',
         'isactive',
         'createdby',
-        'updatedby'
+        'updatedby',
+        'isactive'
     ];
 }

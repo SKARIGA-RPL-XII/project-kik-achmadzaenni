@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PendingRegistration extends Model
+class MsFile extends Model
 {
-    protected $table = 'pending_registrations';
-    protected $primaryKey = 'pendingid';
+    protected $table = 'msfile';
+    protected $primaryKey = 'fileid';
     public $timestamps = false;
 
     protected $fillable = [
-        'usernm',
-        'email',
-        'pswd',
-        'isactive',
+        'filenm',
+        'exfilenm',
         'createddate',
         'createdby',
-        'updateddate',
+        'updatedate',
         'updatedby',
         'isactive'
     ];

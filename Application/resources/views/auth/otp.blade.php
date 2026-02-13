@@ -1,158 +1,168 @@
-<div class="flex justify-center items-center">
+<div class="flex justify-center items-center z-10 w-full px-4 py-8">
     <form method="POST" action="{{ route('otpProcess') }}" data-ajax-submit
-        class="w-full max-w-md border-2 border-[#54834E] bg-white p-8 rounded-3xl
-               flex flex-col gap-6 shadow-lg">
+        class="w-full max-w-md bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-3xl flex flex-col gap-8 shadow-2xl border border-white/20 relative overflow-hidden text-center">
+        
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#54834E] to-[#88c47e]"></div>
+        
         @csrf
 
-        <div class="text-center">
-            <h1 class="text-2xl font-semibold">OTP Verification</h1>
-            <p class="text-gray-600 mt-1">
-                Masukkan 6 digit kode OTP yang dikirim ke email Anda
+        <div class="space-y-2">
+            <div class="w-16 h-16 bg-green-50 text-[#54834E] rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100 shadow-sm">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Verifikasi OTP</h1>
+            <p class="text-gray-500 text-sm max-w-xs mx-auto">
+                Kode 6 digit telah dikirim ke email Anda. Silakan masukkan kode tersebut di bawah ini.
             </p>
         </div>
 
-        <div class="flex justify-center gap-3">
+        <div class="flex justify-center gap-2 sm:gap-3">
             @for ($i = 0; $i < 6; $i++)
-                <input type="text" maxlength="1" inputmode="numeric"
-                    class="otp-input w-12 h-12 md:w-14 md:h-14
-                           text-center text-xl font-semibold
-                           border-2 border-[#54834E]
-                           rounded-xl shadow
-                           focus:outline-none focus:ring-2 focus:ring-[#54834E]">
+                <input type="text" maxlength="1" inputmode="numeric" autocomplete="one-time-code"
+                    class="otp-input w-11 h-12 sm:w-14 sm:h-14 text-center text-2xl font-bold text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#54834E] focus:border-[#54834E] focus:bg-white transition-all shadow-sm placeholder-gray-300"
+                    placeholder="•">
             @endfor
         </div>
+        
         <input type="hidden" name="otp" id="otp">
+
         <button type="submit"
-            class="w-full bg-[#54834E] text-white py-2 rounded-lg shadow
-                   hover:bg-[#2E973E] transition cursor-pointer">
-            Verify OTP
+            class="w-full bg-gradient-to-r from-[#54834E] to-[#40663a] hover:from-[#40663a] hover:to-[#2e4d29] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-900/20 hover:shadow-green-900/40 transform active:scale-[0.98] transition-all duration-200">
+            Verifikasi
         </button>
 
-        <div class="flex flex-col gap-3 pt-4 border-t border-gray-200">
-            <button type="button" id="resendBtn"
-                class="hover:text-blue-600 cursor-pointer disabled:cursor-not-allowed">
-                Kirim Ulang Email
+        <div class="pt-6 border-t border-gray-100">
+            <p class="text-sm text-gray-500 mb-3">Tidak menerima kode?</p>
+            
+            <button type="button" id="resendBtn" 
+                data-url="{{ route('otpResend') }}" 
+                data-method="POST"
+                class="text-sm font-bold text-[#54834E] hover:text-[#2E973E] hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:no-underline">
+                Kirim Ulang Kode
             </button>
-            <p id="timerDisplay" class="text-center text-sm text-gray-600 hidden">
-                Tunggu <span id="countdown">300</span> detik sebelum mengirim ulang
+            
+            <p id="timerDisplay" class="text-xs text-gray-400 mt-2 hidden flex items-center justify-center gap-1">
+                <i class="fa-regular fa-clock"></i> Tunggu <span id="countdown" class="font-bold text-gray-600">300</span> detik lagi
             </p>
         </div>
     </form>
 </div>
+
 <script>
-    const inputs = document.querySelectorAll('.otp-input');
-    const otpHidden = document.getElementById('otp');
-    const resendBtn = document.getElementById('resendBtn');
-    const timerDisplay = document.getElementById('timerDisplay');
-    const countdownSpan = document.getElementById('countdown');
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = document.querySelectorAll('.otp-input');
+        const otpHidden = document.getElementById('otp');
+        const resendBtn = document.getElementById('resendBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const countdownSpan = document.getElementById('countdown');
+        const form = document.querySelector('form');
 
-    let resendTimeout;
-    const RESEND_TIMEOUT = 300; // 5 menit dalam detik
+        inputs[0].focus();
 
-    // Cek localStorage untuk waktu terakhir resend
-    function initializeResendButton() {
-        const lastResendTime = localStorage.getItem('lastOtpResendTime');
-        const now = Date.now();
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                input.value = input.value.replace(/[^0-9]/g, '');
 
-        if (lastResendTime) {
-            const timeDiff = Math.floor((now - parseInt(lastResendTime)) / 1000);
-            const remainingTime = RESEND_TIMEOUT - timeDiff;
+                if (input.value) {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    } 
+                }
+                updateOtp();
+            });
 
-            if (remainingTime > 0) {
-                startCountdown(remainingTime);
-            } else {
-                enableResendButton();
-            }
-        } else {
-            enableResendButton();
-        }
-    }
-
-    function startCountdown(seconds) {
-        resendBtn.disabled = true;
-        timerDisplay.classList.remove('hidden');
-        let remaining = seconds;
-
-        const timer = setInterval(() => {
-            remaining--;
-            countdownSpan.textContent = remaining;
-
-            if (remaining <= 0) {
-                clearInterval(timer);
-                enableResendButton();
-            }
-        }, 1000);
-    }
-
-    function enableResendButton() {
-        resendBtn.disabled = false;
-        timerDisplay.classList.add('hidden');
-    }
-
-    // Event listener untuk tombol resend
-    resendBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await fetch('{{ route('otpResend') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+                
+                if (pastedData) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (inputs[i]) inputs[i].value = char;
+                    });
+                    updateOtp();
+                    const nextIndex = Math.min(pastedData.length, inputs.length - 1);
+                    inputs[nextIndex].focus();
                 }
             });
 
-            if (response.ok) {
-                localStorage.setItem('lastOtpResendTime', Date.now().toString());
-                startCountdown(RESEND_TIMEOUT);
-                const {
-                    toast
-                } = window.sonner;
-                toast.success('OTP telah dikirim ulang ke email Anda', {
-                    duration: 4000,
-                    position: 'top-right',
-                });
-            } else {
-                const {
-                    toast
-                } = window.sonner;
-                toast.error('Gagal mengirim ulang OTP. Silakan coba lagi.', {
-                    duration: 4000,
-                    position: 'top-right',
-                });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            const {
-                toast
-            } = window.sonner;
-            toast.error('Terjadi kesalahan. Silakan coba lagi.', {
-                duration: 4000,
-                position: 'top-right',
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace') {
+                    if (!input.value && index > 0) {
+                        inputs[index - 1].focus();
+                    } else {
+                        input.value = '';
+                    }
+                    updateOtp();
+                } else if (e.key === 'ArrowLeft' && index > 0) {
+                    inputs[index - 1].focus();
+                } else if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
             });
+            
+            input.addEventListener('focus', () => input.select());
+        });
+
+        function updateOtp() {
+            otpHidden.value = Array.from(inputs).map(input => input.value).join('');
         }
-    });
 
-    inputs.forEach((input, index) => {
-        input.addEventListener('input', () => {
-            if (input.value && index < inputs.length - 1) {
-                inputs[index + 1].focus();
+
+        const RESEND_TIMEOUT = 300;
+
+        function initializeResendButton() {
+            const lastResendTime = localStorage.getItem('lastOtpResendTime');
+            
+            if (lastResendTime) {
+                const now = Date.now();
+                const timeDiff = Math.floor((now - parseInt(lastResendTime)) / 1000);
+                const remainingTime = RESEND_TIMEOUT - timeDiff;
+
+                if (remainingTime > 0) {
+                    startCountdown(remainingTime);
+                } else {
+                    enableResendButton();
+                }
+            } else {
+                enableResendButton();
             }
-            updateOtp();
-        });
+        }
 
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && !input.value && index > 0) {
-                inputs[index - 1].focus();
-            }
+        function startCountdown(seconds) {
+            resendBtn.disabled = true;
+            resendBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            timerDisplay.classList.remove('hidden');
+            
+            let remaining = seconds;
+            countdownSpan.textContent = formatTime(remaining);
+
+            const timer = setInterval(() => {
+                remaining--;
+                countdownSpan.textContent = formatTime(remaining);
+
+                if (remaining <= 0) {
+                    clearInterval(timer);
+                    enableResendButton();
+                    localStorage.removeItem('lastOtpResendTime');
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function enableResendButton() {
+            resendBtn.disabled = false;
+            resendBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            timerDisplay.classList.add('hidden');
+        }
+        $('#resendBtn').on('click', function() {
+            localStorage.setItem('lastOtpResendTime', Date.now().toString());
+            startCountdown(RESEND_TIMEOUT);
         });
+        initializeResendButton();
     });
-
-    function updateOtp() {
-        otpHidden.value = Array.from(inputs)
-            .map(input => input.value)
-            .join('');
-    }
-
-    initializeResendButton();
 </script>

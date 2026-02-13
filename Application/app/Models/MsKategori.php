@@ -4,21 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PendingRegistration extends Model
+class MsKategori extends Model
 {
-    protected $table = 'pending_registrations';
-    protected $primaryKey = 'pendingid';
+    protected $table = 'mskategori';
+    protected $primaryKey = 'kategoriid';
     public $timestamps = false;
 
     protected $fillable = [
-        'usernm',
-        'email',
-        'pswd',
-        'isactive',
+        'kategorinm',
         'createddate',
         'createdby',
         'updateddate',
         'updatedby',
-        'isactive'
+        'isactive',
     ];
 }

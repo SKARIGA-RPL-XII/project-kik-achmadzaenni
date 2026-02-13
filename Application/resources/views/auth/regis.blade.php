@@ -1,69 +1,68 @@
-<div class="w-full flex justify-center items-center px-4 py-8 z-5">
-    <form method="POST" action="{{ route('registerProcess') }}" data-ajax-submit
-        class="w-full max-w-md md:max-w-lg border-3 border-[#54834E] bg-white p-6 md:p-8 rounded-3xl flex flex-col space-y-6 shadow-sm">
+<div class="flex justify-center items-center z-10 w-full px-4 py-8">
+    <form method="POST" action="{{ route('registerProcess') }}" data-ajax-submit class="w-full max-w-lg bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-3xl flex flex-col gap-5 shadow-2xl border border-white/20 relative overflow-hidden">
         @csrf
-        <div class="text-center">
-            <h1 class="text-2xl font-semibold">Registrasi</h1>
-            <h3 class="text-lg font-medium">Silahkan daftar untuk menggunakan dalam aplikasi</h3>
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#54834E] to-[#88c47e]"></div>
+        <div class="text-center mb-4">
+            <h1 class="text-3xl font-bold text-gray-800">Buat Akun Baru</h1>
+            <p class="text-gray-500 text-sm mt-2">Bergabunglah dengan kami sekarang</p>
         </div>
-        <div class="w-full relative">
-            <div class="relative">
-                <div class="flex flex-col">
-                    <label for="nickname">Nickname</label>
-                    <input type="text"
-                        class="border-2 border-[#54834E] rounded-lg p-1 shadow-xl @error('nickname') border-red-500 @enderror"
-                        name="nickname" id="nickname" placeholder="Nickname" value="{{ old('nickname') }}" required>
-                    @error('nickname')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="w-full">
+                <label for="usernm" class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Nickname</label>
+                <div class="relative group">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#54834E] transition-colors">
+                        <i class="fa-regular fa-user"></i>
+                    </span>
+                    <input type="text" name="usernm" id="usernm" placeholder="Nama Panggilan" value="{{ old('usernm') }}"
+                        class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#54834E]/50 focus:border-[#54834E] transition-all shadow-sm @error('usernm') border-red-500 @enderror" required>
                 </div>
+                @error('usernm') <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p> @enderror
+            </div>
+            <div class="w-full">
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Email</label>
+                <div class="relative group">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#54834E] transition-colors">
+                        <i class="fa-regular fa-envelope"></i>
+                    </span>
+                    <input type="email" name="email" id="email" placeholder="contoh@email.com" value="{{ old('email') }}"
+                        class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#54834E]/50 focus:border-[#54834E] transition-all shadow-sm @error('email') border-red-500 @enderror" required>
+                </div>
+                @error('email') <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p> @enderror
             </div>
         </div>
-        <div class="w-full relative">
-            <div class="relative">
-                <div class="flex flex-col">
-                    <label for="email">Email</label>
-                    <input type="text"
-                        class="border-2 border-[#54834E] rounded-lg p-1 shadow-xl @error('email') border-red-500 @enderror"
-                        name="email" id="email" placeholder="Email" value="{{ old('email') }}" required>
-                    @error('email')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
+        <div class="grid grid-cols-1 gap-5">
+            <div class="w-full">
+                <label for="password" class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Password</label>
+                <div class="relative group">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#54834E] transition-colors">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input type="password" name="password" id="password" placeholder="Buat password kuat"
+                        class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#54834E]/50 focus:border-[#54834E] transition-all shadow-sm @error('password') border-red-500 @enderror" required>
                 </div>
+                @error('password') <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p> @enderror
             </div>
-        </div>
-        <div class="w-full flex flex-col md:flex-row items-start md:items-center gap-3">
-            <div class="w-full md:w-1/2 relative">
-                <div class="relative">
-                    <div class="flex flex-col">
-                        <label for="password">Password</label>
-                        <input type="password"
-                            class="w-full border-2 border-[#54834E] rounded-lg p-2 shadow-sm @error('password') border-red-500 @enderror"
-                            name="password" id="password" placeholder="Password" required>
-                        @error('password')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-            <div class="w-full md:w-1/2 relative">
-                <div class="relative">
-                    <div class="flex flex-col">
-                        <label for="password_confirmation">Confirm Password</label>
-                        <input type="password"
-                            class="w-full border-2 border-[#54834E] rounded-lg p-2 shadow-sm @error('password_confirmation') border-red-500 @enderror"
-                            name="password_confirmation" id="password_confirmation" placeholder="Confirm Password"
-                            required>
-                        @error('password_confirmation')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
+            <div class="w-full">
+                <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Konfirmasi Password</label>
+                <div class="relative group">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-[#54834E] transition-colors">
+                        <i class="fa-solid fa-check-double"></i>
+                    </span>
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Ulangi password"
+                        class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#54834E]/50 focus:border-[#54834E] transition-all shadow-sm @error('password_confirmation') border-red-500 @enderror" required>
                 </div>
             </div>
         </div>
         <button type="submit"
-            class="w-full bg-[#54834E] text-white rounded-lg shadow p-2 hover:bg-[#2E973E]">Registrasi</button>
-        <h4 class="text-sm text-gray-600">Sudah punya akun? <a href="{{ route('loginForm') }}"
-                class="cursor-pointer text-[#1638E2]">Login disini</a></h4>
+            class="w-full mt-4 bg-gradient-to-r from-[#54834E] to-[#40663a] hover:from-[#40663a] hover:to-[#2e4d29] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-900/20 hover:shadow-green-900/40 transform active:scale-[0.98] transition-all duration-200">
+            Daftar Sekarang
+        </button>
+        <div class="text-center mt-2">
+            <p class="text-sm text-gray-600">Sudah memiliki akun? 
+                <a href="{{ route('loginForm') }}" class="font-bold text-[#54834E] hover:text-[#2E973E] transition-colors hover:underline">
+                    Login Here
+                </a>
+            </p>
+        </div>
     </form>
 </div>
